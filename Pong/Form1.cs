@@ -133,7 +133,7 @@ namespace Pong
             const int PADDLE_EDGE = 20;  // buffer distance between screen edge and paddle            
 
             p1.Width = p2.Width = 10;    //height for both paddles set the same
-            p1.Height = p2.Height = 40;  //width for both paddles set the same
+            p1.Height = p2.Height = 50;  //width for both paddles set the same
 
             //p1 starting position
             p1.X = PADDLE_EDGE;
@@ -160,13 +160,13 @@ namespace Pong
             #region update ball position
 
             // TODO create code to move ball either left or right based on ballMoveRight and using BALL_SPEED
-            if (ballMoveRight == true)
-                ball.X = ball.X + BALL_SPEED;
-            else
-                ball.X = ball.X - BALL_SPEED;
+            if (ballMoveRight) { ball.X = ball.X + BALL_SPEED; }
+            else  { ball.X = ball.X - BALL_SPEED; }
 
-            
+
             // TODO create code move ball either down or up based on ballMoveDown and using BALL_SPEED
+            if (ballMoveDown) { ball.Y = ball.Y + BALL_SPEED; }
+            else { ball.Y = ball.Y - BALL_SPEED; }
 
             #endregion
 
@@ -210,24 +210,40 @@ namespace Pong
 
             if (ball.Y < 0) // if ball hits top line
             {
-                // TODO use ballMoveDown boolean to change direction
-                // TODO play a collision sound
+                //  use ballMoveDown boolean to change direction
+                ballMoveDown = true;
+                //  play a collision sound
+                collisionSound.Play();
             }
-            // TODO In an else if statement use ball.Y, this.Height, and ball.Width to check for collision with bottom line
+            //  In an else if statement use ball.Y, this.Height, and ball.Width to check for collision with bottom line
+            else if (ball.Y > Height - ball.Height)
+            {
+                ballMoveDown = false;
+            }
             // If true use ballMoveDown down boolean to change direction
 
             #endregion
 
             #region ball collision with paddles
 
-            // TODO create if statment that checks p1 collides with ball and if it does
+            // if statment that checks p1 collides with ball and if it does
                  // --- play a "paddle hit" sound and
                  // --- use ballMoveRight boolean to change direction
+            if (ball.IntersectsWith(p1))
+            {
+                ballMoveRight = true;
+                collisionSound.Play();
+            }
 
-            // TODO create if statment that checks p2 collides with ball and if it does
-                // --- play a "paddle hit" sound and
-                // --- use ballMoveRight boolean to change direction
-            
+            //  if statment that checks p2 collides with ball and if it does
+            // --- play a "paddle hit" sound and
+            // --- use ballMoveRight boolean to change direction
+            if (ball.IntersectsWith(p2))
+            {
+                ballMoveRight = false;
+                collisionSound.Play();
+            }
+
             /*  ENRICHMENT
              *  Instead of using two if statments as noted above see if you can create one
              *  if statement with multiple conditions to play a sound and change direction
@@ -242,6 +258,17 @@ namespace Pong
                 // TODO
                 // --- play score sound
                 // --- update player 2 score
+                player2Score++;
+                if (player2Score == gameWinScore)
+                {
+                    GameOver();
+                }
+                    
+                else
+                {
+                    SetParameters();
+                    ballMoveRight = true;
+                }
 
                 // TODO use if statement to check to see if player 2 has won the game. If true run 
                 // GameOver method. Else change direction of ball and call SetParameters method.
@@ -255,7 +282,12 @@ namespace Pong
             //refresh the screen, which causes the Form1_Paint method to run
             this.Refresh();
         }
-        
+
+        private void GameOver()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Displays a message for the winner when the game is over and allows the user to either select
         /// to play again or end the program
