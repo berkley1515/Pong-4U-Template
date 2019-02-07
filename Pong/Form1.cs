@@ -26,8 +26,8 @@ namespace Pong
         #region global values
 
         //graphics objects for drawing
-        SolidBrush drawBrush = new SolidBrush(Color.White);
-        Font drawFont = new Font("Courier New", 10);
+        SolidBrush drawBrush = new SolidBrush(Color.LightCyan);
+        Font drawFont = new Font("Tandysoft", 35);
 
         // Sounds for game
         SoundPlayer scoreSound = new SoundPlayer(Properties.Resources.score);
@@ -352,8 +352,8 @@ namespace Pong
             // TODO draw ball using FillRectangle
             e.Graphics.FillEllipse(drawBrush, ball);
             // TODO draw scores to the screen using DrawString
-            e.Graphics.DrawString("Score: " + player1Score, drawFont, drawBrush, 10, 10);
-            e.Graphics.DrawString("Score: " + player2Score, drawFont, drawBrush, 500, 10);
+            e.Graphics.DrawString("" + player1Score, drawFont, drawBrush, Width / 2 -100, 30);
+            e.Graphics.DrawString("" + player2Score, drawFont, drawBrush, Width / 2 +50, 30);
         }
 
     }
