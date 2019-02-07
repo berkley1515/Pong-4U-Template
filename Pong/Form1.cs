@@ -126,13 +126,26 @@ namespace Pong
                 player1Score = player2Score = 0;
                 newGameOk = false;
                 startLabel.Visible = false;
+                countdownLabel.Text = "3";
+                countdownLabel.Visible = true;
+                this.Refresh();
+                Thread.Sleep(1000);
+                countdownLabel.Text = "2";
+                this.Refresh();
+                Thread.Sleep(1000);
+                countdownLabel.Text = "1";
+                this.Refresh();
+                Thread.Sleep(1000);
+                countdownLabel.Visible = false;
+                this.Refresh();
+                Thread.Sleep(500);
                 gameUpdateLoop.Start();
             }
 
             //set starting position for paddles on new game and point scored 
-            const int PADDLE_EDGE = 20;  // buffer distance between screen edge and paddle            
+            const int PADDLE_EDGE = 10;  // buffer distance between screen edge and paddle            
 
-            p1.Width = p2.Width = 10;    //height for both paddles set the same
+            p1.Width = p2.Width = 5;    //height for both paddles set the same
             p1.Height = p2.Height = 50;  //width for both paddles set the same
 
             //p1 starting position
@@ -144,7 +157,7 @@ namespace Pong
             p2.Y = this.Height / 2 - p2.Height / 2;
 
             // Width and Height of ball
-            ball.Width = ball.Height = 20;
+            ball.Width = ball.Height = 10;
             // set starting X position for ball to middle of screen, (use this.Width and ball.Width)
             ball.X = this.Width / 2-ball.Width/2;
             // set starting Y position for ball to middle of screen, (use this.Height and ball.Height)
@@ -261,12 +274,13 @@ namespace Pong
                 player2Score++;
                 if (player2Score == gameWinScore)
                 {
-                    GameOver();
+                    GameOver(winner: "Player 2");
                 }
                     
                 else
                 {
                     SetParameters();
+                    Thread.Sleep(600);
                     ballMoveRight = true;
                 }
 
@@ -276,9 +290,24 @@ namespace Pong
             }
 
             // TODO same as above but this time check for collision with the right wall
+            if (ball.X > Width)  // ball hits right wall logic
+            {
+                player1Score++;
+                if (player1Score == gameWinScore)
+                {
+                    GameOver(winner: "Player 1");
+                }
+
+                else
+                {
+                    SetParameters();
+                    Thread.Sleep(1000);
+                    ballMoveRight = false;
+                }
+            }
 
             #endregion
-            
+
             //refresh the screen, which causes the Form1_Paint method to run
             this.Refresh();
         }
@@ -299,9 +328,18 @@ namespace Pong
 
             // TODO create game over logic
             // --- stop the gameUpdateLoop
+            gameUpdateLoop.Stop();
+
             // --- show a message on the startLabel to indicate a winner, (need to Refresh).
+            startLabel.Text = "Winner is: " + winner;
+            startLabel.Visible = true;
+            this.Refresh();
+
             // --- pause for two seconds 
+            Thread.Sleep(2000);
+            this.Refresh();
             // --- use the startLabel to ask the user if they want to play again
+            startLabel.Text = "Press Space To Play Again!";
 
         }
 
@@ -314,6 +352,8 @@ namespace Pong
             // TODO draw ball using FillRectangle
             e.Graphics.FillEllipse(drawBrush, ball);
             // TODO draw scores to the screen using DrawString
+            e.Graphics.DrawString("Score: " + player1Score, drawFont, drawBrush, 10, 10);
+            e.Graphics.DrawString("Score: " + player2Score, drawFont, drawBrush, 500, 10);
         }
 
     }
