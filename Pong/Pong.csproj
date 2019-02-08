@@ -82,6 +82,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ramlogo.ico" />
+    <None Include="Resources\bowling-pins-falling.wav" />
+    <None Include="Resources\Wii_Menu_Music-5-E_0uhPzaE.wav" />
+    <None Include="Resources\we-are-number-one-but-with-a-twist.wav" />
+    <None Include="Resources\voice_sans.wav" />
     <None Include="Resources\collision.wav" />
     <None Include="Resources\score.wav" />
     <None Include="Resources\wall bounce.wav" />

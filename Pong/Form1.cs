@@ -26,12 +26,14 @@ namespace Pong
         #region global values
 
         //graphics objects for drawing
-        SolidBrush drawBrush = new SolidBrush(Color.LightCyan);
+        SolidBrush drawBrush = new SolidBrush(Color.Cyan);
         Font drawFont = new Font("Tandysoft", 35);
 
         // Sounds for game
-        SoundPlayer scoreSound = new SoundPlayer(Properties.Resources.score);
-        SoundPlayer collisionSound = new SoundPlayer(Properties.Resources.collision);
+        SoundPlayer startSound = new SoundPlayer(Properties.Resources.wii);
+        SoundPlayer scoreSound = new SoundPlayer(Properties.Resources.bowling);
+        SoundPlayer winSound = new SoundPlayer(Properties.Resources.one);
+        SoundPlayer collisionSound = new SoundPlayer(Properties.Resources.sans);
 
         //determines whether a key is being pressed or not
         Boolean aKeyDown, zKeyDown, jKeyDown, mKeyDown;
@@ -123,6 +125,7 @@ namespace Pong
         {
             if (newGameOk)
             {
+                startSound.Play();
                 player1Score = player2Score = 0;
                 newGameOk = false;
                 startLabel.Visible = false;
@@ -232,6 +235,7 @@ namespace Pong
             else if (ball.Y > Height - ball.Height)
             {
                 ballMoveDown = false;
+                collisionSound.Play();
             }
             // If true use ballMoveDown down boolean to change direction
 
@@ -271,6 +275,7 @@ namespace Pong
                 // TODO
                 // --- play score sound
                 // --- update player 2 score
+                scoreSound.Play();
                 player2Score++;
                 if (player2Score == gameWinScore)
                 {
@@ -300,6 +305,7 @@ namespace Pong
 
                 else
                 {
+                    scoreSound.Play();
                     SetParameters();
                     Thread.Sleep(1000);
                     ballMoveRight = false;
@@ -329,6 +335,7 @@ namespace Pong
             // TODO create game over logic
             // --- stop the gameUpdateLoop
             gameUpdateLoop.Stop();
+            winSound.Play();
 
             // --- show a message on the startLabel to indicate a winner, (need to Refresh).
             startLabel.Text = "Winner is: " + winner;
